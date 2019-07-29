@@ -30,6 +30,8 @@ target 'Contacts' do
 
   pod 'RNThumbnail', :path => '../node_modules/react-native-thumbnail'
 
+  pod 'RNFS', :path => '../node_modules/react-native-fs'
+
   target 'ContactsTests' do
     inherit! :search_paths
     # Pods for testing

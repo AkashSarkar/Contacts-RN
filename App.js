@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {PermissionsAndroid} from 'react-native';
 import Contacts from 'react-native-contacts';
+import * as RNFS from 'react-native-fs';
 
 import {
     FlatList,
@@ -51,6 +52,11 @@ const App = () => {
         let sorted = entries.sort((a, b) => a[1].displayName > b[1].displayName ? 1 : -1);
         const sortedList = [];
         sorted.map(item => {
+            RNFS.readFile(item[1].thumbnailPath, 'ascii').then(res => {
+                console.log(res);
+            }).catch(err => {
+                console.log(err.message, err.code);
+            });
             sortedList.push(item[1])
         })
         return sortedList;
@@ -66,7 +72,7 @@ const App = () => {
                         item.phoneNumbers.length !== 0 &&
                         <View>
                             <Image
-                                source={item.thumbnailPath ? { uri: item.thumbnailPath} : null}
+                                source={item.thumbnailPath ? {uri: item.thumbnailPath} : null}
                                 height={60}
                                 width={60}/>
                             <Text style={styles.contact_details}>
