@@ -1,0 +1,10 @@
+rootProject.name = 'Contacts'
+include ':react-native-thumbnail'
+project(':react-native-thumbnail').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-thumbnail/android')
+apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
+include ':app'
+
+include ':react-native-contacts'
+project(':react-native-contacts').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-contacts/android')
+
+
