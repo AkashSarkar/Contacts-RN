@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {PermissionsAndroid} from 'react-native';
 import Contacts from 'react-native-contacts';
 import * as RNFS from 'react-native-fs';
+import * as RNGRP from 'react-native-get-real-path';
 
 import {
     FlatList,
@@ -52,16 +53,10 @@ const App = () => {
         let sorted = entries.sort((a, b) => a[1].displayName > b[1].displayName ? 1 : -1);
         const sortedList = [];
         sorted.map(item => {
-            RNFS.readFile(item[1].thumbnailPath, 'ascii').then(res => {
-                console.log(res);
-            }).catch(err => {
-                console.log(err.message, err.code);
-            });
             sortedList.push(item[1])
         })
         return sortedList;
     }
-    console.log(contactsList);
     return (
         <ScrollView>
             <View style={styles.container}>
@@ -73,8 +68,7 @@ const App = () => {
                         <View>
                             <Image
                                 source={item.thumbnailPath ? {uri: item.thumbnailPath} : null}
-                                height={60}
-                                width={60}/>
+                                style={{width: 30, height: 30}}/>
                             <Text style={styles.contact_details}>
                                 Name: {`${item.displayName} `}
                             </Text>
