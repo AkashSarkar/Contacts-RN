@@ -28,9 +28,7 @@ target 'Contacts' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
-  pod 'RNThumbnail', :path => '../node_modules/react-native-thumbnail'
 
-  pod 'RNFS', :path => '../node_modules/react-native-fs'
 
   target 'ContactsTests' do
     inherit! :search_paths
