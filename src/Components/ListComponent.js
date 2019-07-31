@@ -5,11 +5,11 @@ import {
     ScrollView,
     View,
     Text,
-    Image,
+    TouchableOpacity,
 } from 'react-native';
 import Avatar from "./Avatar"
 
-const ListComponent = ({contactsList}) => {
+const ListComponent = ({contactsList,onSelect}) => {
     const getAvatarInitials = textString => {
         if (!textString) return "";
 
@@ -39,31 +39,35 @@ const ListComponent = ({contactsList}) => {
                     data={contactsList}
                     renderItem={({item}) => (
                         item.phoneNumbers.length > 0 &&
-                        <View style={styles.listWrapper}>
-                            <Avatar
-                                img={
-                                    item.hasThumbnail
-                                        ? {uri: item.thumbnailPath}
-                                        : undefined
-                                }
-                                placeholder={getAvatarInitials(item.displayName)}
-                                width={40}
-                                height={40}
-                                roundedImage
-                                roundedPlaceholder
-                                style={styles.imageStyle}
-                            />
-                            <View style={styles.detailsWrapper}>
-                                <Text style={styles.contact_details}>
-                                    {item.displayName}
-                                </Text>
-                                {item.phoneNumbers.map((phone, index) => (
-                                    <Text style={styles.phones}
-                                          key={index}>{phone.number}
+                        <TouchableOpacity
+                            onPress={() => onSelect(item)}
+                        >
+                            <View style={styles.listWrapper}>
+                                <Avatar
+                                    img={
+                                        item.hasThumbnail
+                                            ? {uri: item.thumbnailPath}
+                                            : undefined
+                                    }
+                                    placeholder={getAvatarInitials(item.displayName)}
+                                    width={40}
+                                    height={40}
+                                    roundedImage
+                                    roundedPlaceholder
+                                    style={styles.imageStyle}
+                                />
+                                <View style={styles.detailsWrapper}>
+                                    <Text style={styles.contact_details}>
+                                        {item.displayName}
                                     </Text>
-                                ))}
+                                    {item.phoneNumbers.map((phone, index) => (
+                                        <Text style={styles.phones}
+                                              key={index}>{phone.number}
+                                        </Text>
+                                    ))}
+                                </View>
                             </View>
-                        </View>
+                        </TouchableOpacity>
                     )}
                     //Setting the number of column
                     numColumns={1}

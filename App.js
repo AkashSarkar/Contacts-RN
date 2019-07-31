@@ -16,6 +16,7 @@ const App = () => {
     const [contactsList, setContacts] = useState({});
     const [filteredContacts, setFilteredContacts] = useState({});
     const [searchText, setSearchText] = useState("");
+    const [selectedContact, setSelectedContact] = useState({label: "", value: -1});
 
     const loadContacts = () => {
         Contacts.getAll((err, contacts) => {
@@ -54,6 +55,10 @@ const App = () => {
         setFilteredContacts(searchData());
     }, [searchText]);
 
+    useEffect(() => {
+        console.log(selectedContact)
+    }, [selectedContact])
+
     const searchData = () => {
         let items = Object.values(contactsList);
         return items.filter(
@@ -75,6 +80,14 @@ const App = () => {
         setSearchText(text);
     }
 
+    const onSelect = (item) => {
+        setSelectedContact({
+            ...selectedContact,
+            label: item.displayName,
+            value: item.phoneNumbers[0].number
+        })
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <View
@@ -93,7 +106,7 @@ const App = () => {
                     }}
                 />
             </View>
-            <View style={{padding:10}}>
+            <View style={{padding: 10}}>
                 <View style={{
                     marginBottom: 10,
                     borderBottomWidth: StyleSheet.hairlineWidth,
@@ -113,7 +126,7 @@ const App = () => {
                     />
                 </View>
             </View>
-            <ListComponent contactsList={filteredContacts}/>
+            <ListComponent contactsList={filteredContacts} onSelect={onSelect}/>
         </SafeAreaView>
     );
 };
