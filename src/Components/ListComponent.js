@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     FlatList,
     StyleSheet,
@@ -9,15 +9,20 @@ import {
 } from 'react-native';
 import Avatar from "./Avatar"
 
-const ListComponent = ({contactsList,onSelect}) => {
+const ListComponent = ({ contactsList, onSelect }) => {
     const getAvatarInitials = textString => {
         if (!textString) return "";
 
         const text = textString.trim();
 
+        // console.log(text);
         const textSplit = text.split(" ");
-        if (textSplit.length <= 1) return text.charAt(0);
+        if (textSplit.length <= 1) {
+            // console.log("single text", text.charAt(0));
+            return text.charAt(0);
 
+        }
+        // console.log("double", textSplit[0].charAt(0) + textSplit[textSplit.length - 1].charAt(0));
         return textSplit[0].charAt(0) + textSplit[textSplit.length - 1].charAt(0);
     };
     return (
@@ -29,7 +34,7 @@ const ListComponent = ({contactsList,onSelect}) => {
                     borderColor: "#515151"
                 }}>
 
-                    <Text style={{fontSize: 18, fontWeight: "300"}}>
+                    <Text style={{ fontSize: 18, fontWeight: "300" }}>
                         ALL CONTACTS
                     </Text>
 
@@ -37,7 +42,8 @@ const ListComponent = ({contactsList,onSelect}) => {
                 <FlatList
                     keyExtractor={(item, index) => index.toString()}
                     data={contactsList}
-                    renderItem={({item}) => (
+                    initialNumToRender={15}
+                    renderItem={({ item }) => (
                         item.phoneNumbers.length > 0 &&
                         <TouchableOpacity
                             onPress={() => onSelect(item)}
@@ -46,14 +52,12 @@ const ListComponent = ({contactsList,onSelect}) => {
                                 <Avatar
                                     img={
                                         item.hasThumbnail
-                                            ? {uri: item.thumbnailPath}
+                                            ? { uri: item.thumbnailPath }
                                             : undefined
                                     }
-                                    placeholder={getAvatarInitials(item.displayName)}
                                     width={40}
                                     height={40}
                                     roundedImage
-                                    roundedPlaceholder
                                     style={styles.imageStyle}
                                 />
                                 <View style={styles.detailsWrapper}>
@@ -62,7 +66,7 @@ const ListComponent = ({contactsList,onSelect}) => {
                                     </Text>
                                     {item.phoneNumbers.map((phone, index) => (
                                         <Text style={styles.phones}
-                                              key={index}>{phone.number}
+                                            key={index}>{phone.number}
                                         </Text>
                                     ))}
                                 </View>

@@ -1,52 +1,51 @@
 import React from "react";
-import {Image, View, Text, StyleSheet} from "react-native";
+import { Image, View, Text, StyleSheet } from "react-native";
+import asset from "../Asset";
 
 
 const Avatar = (props) => {
     const renderImage = () => {
-        const {img, width, height, roundedImage} = props;
-        const {imageContainer, image} = styles;
+        const { img, width, height, roundedImage } = props;
+        const { imageContainer, image } = styles;
 
         const viewStyle = [imageContainer];
         if (roundedImage)
-            viewStyle.push({borderRadius: Math.round(width + height) / 2});
+            viewStyle.push({ borderRadius: Math.round(width + height) / 2 });
         return (
             <View style={viewStyle}>
-                <Image style={image} source={img}/>
+                <Image style={image} source={img ? img : asset.contact} />
             </View>
         );
     };
 
     const renderPlaceholder = () => {
-        const {placeholder, width, height, roundedPlaceholder} = props;
-        const {placeholderContainer, placeholderText} = styles;
+        const { placeholder, width, height, roundedPlaceholder } = props;
+        const { placeholderContainer, placeholderText } = styles;
 
         const viewStyle = [placeholderContainer];
         if (roundedPlaceholder)
-            viewStyle.push({borderRadius: Math.round(width + height) / 2});
-
+            viewStyle.push({ borderRadius: Math.round(width + height) / 2 });
+        // console.log(placeholder);
         return (
             <View style={viewStyle}>
-                <View style={viewStyle}>
-                    <Text
-                        adjustsFontSizeToFit
-                        numberOfLines={1}
-                        minimumFontScale={0.01}
-                        style={[{fontSize: Math.round(width) / 2}, placeholderText]}
-                    >
-                        {placeholder}
-                    </Text>
-                </View>
+                <Text
+                    adjustsFontSizeToFit
+                    numberOfLines={1}
+                    minimumFontScale={0.01}
+                    style={[{ fontSize: placeholder.length > 1 ? Math.round(width) / 3 : Math.round(width) / 2 }, placeholderText]}
+                >
+                    {placeholder}
+                </Text>
             </View>
         );
     };
 
 
-    const {img, width, height} = props;
-    const {container} = styles;
+    const { img, width, height } = props;
+    const { container } = styles;
     return (
-        <View style={[container, props.style, {width, height}]}>
-            {img ? renderImage() : renderPlaceholder()}
+        <View style={[container, props.style, { width, height }]}>
+            {renderImage()}
         </View>
     );
 

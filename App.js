@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {PermissionsAndroid} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { PermissionsAndroid } from 'react-native';
 import Contacts from 'react-native-contacts';
 import {
     TextInput,
@@ -16,7 +16,7 @@ const App = () => {
     const [contactsList, setContacts] = useState({});
     const [filteredContacts, setFilteredContacts] = useState({});
     const [searchText, setSearchText] = useState("");
-    const [selectedContact, setSelectedContact] = useState({label: "", value: -1});
+    const [selectedContact, setSelectedContact] = useState({ label: "", value: -1 });
 
     const loadContacts = () => {
         Contacts.getAll((err, contacts) => {
@@ -24,6 +24,7 @@ const App = () => {
                 // error
             } else {
                 const allContacts = sortFunc(contacts);
+                let phoneNumbers = [];
                 setContacts(allContacts);
                 setFilteredContacts(allContacts)
             }
@@ -56,7 +57,6 @@ const App = () => {
     }, [searchText]);
 
     useEffect(() => {
-        console.log(selectedContact)
     }, [selectedContact])
 
     const searchData = () => {
@@ -72,6 +72,11 @@ const App = () => {
         // entries.sort((a, b) => console.log(b[1].displayName));
         const sortedList = [];
         sorted.map(item => {
+            let phoneNumbers = new Set(item[1].phoneNumbers.map(phoneNumber => (phoneNumber.number.replace(/-| /g, ''))));
+            item[1].phoneNumbers = [];
+            phoneNumbers.forEach((number) => {
+                item[1].phoneNumbers.push({ number: number })
+            })
             sortedList.push(item[1])
         })
         return sortedList;
@@ -79,6 +84,22 @@ const App = () => {
     const handleSearchTextChange = (text) => {
         setSearchText(text);
     }
+
+    const getAvatarInitials = textString => {
+        if (!textString) return "";
+
+        const text = textString.trim();
+
+        // console.log(text);
+        const textSplit = text.split(" ");
+        if (textSplit.length <= 1) {
+            // console.log("single text", text.charAt(0));
+            return text.charAt(0);
+
+        }
+        // console.log("double", textSplit[0].charAt(0) + textSplit[textSplit.length - 1].charAt(0));
+        return textSplit[0].charAt(0) + textSplit[textSplit.length - 1].charAt(0);
+    };
 
     const onSelect = (item) => {
         setSelectedContact({
@@ -106,19 +127,19 @@ const App = () => {
                     }}
                 />
             </View>
-            <View style={{padding: 10}}>
+            <View style={{ padding: 10 }}>
                 <View style={{
                     marginBottom: 10,
                     borderBottomWidth: StyleSheet.hairlineWidth,
                     borderColor: "#515151"
                 }}>
                     <View>
-                        <Text style={{fontSize: 20, fontWeight: "300"}}>
+                        <Text style={{ fontSize: 20, fontWeight: "300" }}>
                             Number
                         </Text>
                     </View>
                 </View>
-                <View style={{marginBottom: 15}}>
+                <View style={{ marginBottom: 15 }}>
                     <TextInput
                         placeholder="Enter Number"
                         onChangeText={(text) => handleSearchTextChange(text)}
@@ -126,7 +147,7 @@ const App = () => {
                     />
                 </View>
             </View>
-            <ListComponent contactsList={filteredContacts} onSelect={onSelect}/>
+            <ListComponent contactsList={filteredContacts} onSelect={onSelect} />
         </SafeAreaView>
     );
 };
